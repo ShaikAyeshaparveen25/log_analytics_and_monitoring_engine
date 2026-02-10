@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            height: 100vh;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .login-container {
+            background: #fff;
+            padding: 30px;
+            width: 320px;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .login-container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-size: 14px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            outline: none;
+            font-size: 14px;
+        }
+
+        .input-group input:focus {
+            border-color: #667eea;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 10px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .login-btn:hover {
+            background: #5a67d8;
+        }
+
+        .footer-text {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 13px;
+            color: #777;
+        }
+
+        .footer-text a {
+            color: #667eea;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+        <h2>Login</h2>
+
+        <form id="login_form">
+            
+            <div class="input-group">
+                <label>Email</label>
+                <input type="email" id="email" placeholder="Enter your email" required>
+            </div>
+
+            <div class="input-group">
+                <label>Password</label>
+                <input type="password" id="password" placeholder="Enter your password" required>
+            </div>
+
+            <button class="login-btn" type="submit">Login</button>
+        </form>
+    </div>
+    <script>
+document.getElementById("login_form").addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    const message = document.getElementById("message");
+
+    try {
+        const response = await fetch("http://127.0.0.1:8000/create/user", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                email: email,
+                password: password
+            })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            message.textContent = "User login successful ";
+            message.style.color = "green";
+            console.log(data);
+        } else {
+            message.textContent = data.message || "Invalid credentials ";
+            message.style.color = "red";
+        }
+
+    } catch (error) {
+        console.error(error);
+        message.textContent = "Server error ";
+        message.style.color = "red";
+    }
+});
+</script>
+
+</body>
+</html>
